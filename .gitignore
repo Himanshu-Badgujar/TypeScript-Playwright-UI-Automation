@@ -1,0 +1,36 @@
+# Node modules
+node_modules/
+
+# Dependency locks
+package-lock.json
+pnpm-lock.yaml
+yarn.lock
+
+# VSCode settings
+.vscode/
+
+# Playwright reports & cache
+/test-results/
+/playwright-report/
+/blob-report/
+/playwright/.cache
+/.playwright-cache
+
+# Environment files
+.env
+.env.*
+
+# Compiled JavaScript files
+*.js
+*.js.map
+
+# Logs
+logs
+*.log
+
+# OS-specific
+.DS_Store
+Thumbs.db
+
+# Coverage reports
+coverage/
