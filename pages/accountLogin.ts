@@ -14,7 +14,7 @@ export class LoginPage {
     }
 
     async gotoLoginPage():Promise<boolean>{
-        await this.page.goto('https://naveenautomationlabs.com/opencart/index.php?route=account/login');
+        await this.page.goto('/opencart/index.php?route=account/login');
         return await this.page.title() === 'Account Login';
     }
 

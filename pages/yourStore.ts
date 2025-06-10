@@ -13,7 +13,7 @@ export class YourStore{
         this.homeButton = page.getByRole('link', { name: '' });
         this.macBookAddToCartButton = page.getByRole('button', { name: ' Add to Cart' }).first();
         this.successToast = page.getByText('Success: You have added', {exact: false});
-        this.cartButton = page.getByRole('button', { name: ' 1 item(s) - $' });
+        this.cartButton = page.locator('#cart-total');
         this.checkoutButton = page.locator('#cart').getByRole('link', { name: ' Checkout' });
     }
 

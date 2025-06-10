@@ -1,68 +1,91 @@
-import {expect, Page, Locator} from '@playwright/test'
+import {Page, Locator} from '@playwright/test'
 
 export class Checkout{
+    readonly iWantToUseNewAddress: Locator;
     readonly firstNameInput: Locator;
     readonly lastNameInput: Locator;
-    readonly companyNameInput: Locator;
     readonly addressInput: Locator;
-    readonly address2Input: Locator;
     readonly cityInput: Locator;
-    readonly postCodeInput: Locator;
+    readonly postcodeInput: Locator;
     readonly countrySelector: Locator;
-    readonly regionInput: Locator;
+    readonly regionSelector: Locator;
     readonly continueButton: Locator;
+    readonly step2Assert: Locator;
+    readonly checkbox: Locator;
 
     constructor(page: Page){
+        this.iWantToUseNewAddress = page.getByRole('radio', { name: 'I want to use a new address' });
         this.firstNameInput = page.getByRole('textbox', { name: '* First Name' });
         this.lastNameInput = page.getByRole('textbox', { name: '* Last Name' });
-        this.companyNameInput = page.getByRole('textbox', { name: 'Company' });
         this.addressInput = page.getByRole('textbox', { name: '* Address' });
-        this.address2Input = page.getByRole('textbox', { name: 'Address 2' });
         this.cityInput = page.getByRole('textbox', { name: '* City' });
-        this.postCodeInput = page.getByRole('textbox', { name: '* Post Code' });
+        this.postcodeInput = page.getByRole('textbox', { name: '* Post Code' });
         this.countrySelector = page.getByLabel('Country');
-        this.regionInput = page.getByLabel('Region / State');
-        this.continueButton = page.getByRole('button', { name: 'Continue' });  
+        this.regionSelector = page.getByLabel('Region / State');
+        this.continueButton = page.getByRole('button', { name: 'Continue' });
+        this.step2Assert = page.locator('textarea[name="comment"]');
+        this.checkbox = page.getByRole('checkbox');
     }
 
-    async enterFirstName(firstNameUserInput: string):Promise<boolean>{
+    async checkiWantToUseNewAddress():Promise<boolean>{
+        if (await this.iWantToUseNewAddress.isChecked()){
+            return true
+        }
+        else {
+            await this.iWantToUseNewAddress.check();
+            return await this.iWantToUseNewAddress.isChecked();
+        }
+    }
+
+    async fillFirstName(firstNameUserInput: string):Promise<boolean>{
         await this.firstNameInput.fill(firstNameUserInput);
         const filledValue = await this.firstNameInput.inputValue();
         return filledValue === firstNameUserInput;
     }
 
-    async enterLastName(lastNameUserInput: string):Promise<boolean>{
+    async fillLastName(lastNameUserInput: string):Promise<boolean>{
         await this.lastNameInput.fill(lastNameUserInput);
         const filledValue = await this.lastNameInput.inputValue()
         return filledValue === lastNameUserInput;
     }
 
-    async EnterCompanyName(companyNameUserInput: string):Promise<boolean>{
-        await this.companyNameInput.fill(companyNameUserInput);
-        const filledValue = await this.companyNameInput.inputValue()
-        return filledValue === companyNameUserInput;
-    }
-
-    async EnterAddress(addressUserInput: string):Promise<boolean>{
+    async fillAddress(addressUserInput: string):Promise<boolean>{
         await this.addressInput.fill(addressUserInput);
         const filledValue = await this.addressInput.inputValue()
         return filledValue === addressUserInput;
     }
 
-    async EnterAddress2(address2UserInput: string):Promise<boolean>{
-        await this.address2Input.fill(address2UserInput);
-        const filledValue = await this.address2Input.inputValue()
-        return filledValue === address2UserInput;
+    async fillCity(cityUserInput: string):Promise<boolean>{
+        await this.cityInput.fill(cityUserInput);
+        const filledValue = await this.cityInput.inputValue();
+        return filledValue === cityUserInput;
     }
 
+    async fillPostcode(postcodeUserInput: string):Promise<boolean>{
+        await this.postcodeInput.fill(postcodeUserInput);
+        const filledValue = await this.postcodeInput.inputValue();
+        return filledValue === postcodeUserInput;
+    }
 
+    async fillCountrySelector(userSelection: string):Promise<boolean>{
+        await this.countrySelector.selectOption(userSelection);
+        const filledValue = await this.countrySelector.inputValue();
+        return filledValue == userSelection;
+    }
 
+    async fillRegionSelector(userSelection: string):Promise<boolean>{
+        await this.regionSelector.selectOption(userSelection);
+        const filledValue = await this.regionSelector.inputValue();
+        return filledValue == userSelection;
+    }
 
+    async pressContinueButton():Promise<boolean>{
+        await this.continueButton.click();
+        return this.step2Assert.isVisible();
+    }
 
-
-
-
-
-
-
+    async selectCheckbox():Promise<boolean>{
+        await this.checkbox.check();
+        return this.checkbox.isChecked();
+    }
 }
