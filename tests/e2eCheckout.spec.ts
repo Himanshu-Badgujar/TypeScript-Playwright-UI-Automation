@@ -1,6 +1,7 @@
 import {test, expect} from '@playwright/test';
 import {LoginPage} from '../pages/accountLogin';
 import { YourStore } from '../pages/yourStore';
+import { Checkout } from '../pages/checkout';
 
 test('e2eCheckout', async({page})=>{
     const loginPage = new LoginPage(page);
@@ -12,6 +13,16 @@ test('e2eCheckout', async({page})=>{
     expect(await yourStore.addMacBookToCart()).toBe(true);
     expect(await yourStore.clickCartButton()).toBe(true);
     expect (await yourStore.clickCheckoutButton()).toBe(true);
+
+    const checkout = new Checkout(page)
+    expect (typeof await checkout.checkiWantToUseNewAddress()).toBe('boolean')
+    expect (await checkout.fillFirstName('Test')).toBe(true);
+    expect (await checkout.fillLastName('User')).toBe(true);
+    expect (await checkout.fillAddress('This is my address.')).toBe(true);
+    expect (await checkout.fillCity('This is my city.')).toBe(true);
+    expect (await checkout.fillPostcode('This is my postcode.')).toBe(true);
+    expect (await checkout.fillCountrySelector('81')).toBe(true);
+    expect (await checkout.fillRegionSelector('1254')).toBe(true);
 
     await new Promise(resolve => setTimeout(resolve, 5000));
 });
